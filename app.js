@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
 let userId = req.cookies.userId;
 
   if (!userId) {
-    // Se não existir, cria um novo identificador único (UUID) e define como cookie
+
     userId = uuidv4();
     res.cookie('userId', userId, { httpOnly: true });
   }
@@ -49,7 +49,6 @@ let userId = req.cookies.userId;
 app.get('/pagina1', (req, res) => {
     const userId = req.cookies.userId;
 
-    // Registra a atividade do usuário no array de atividades
     atividade.push({ userId, activity: 'Visitou a página 1', timestamp: new Date() });
   
     saveJson();
@@ -60,7 +59,6 @@ app.get('/pagina1', (req, res) => {
   app.get('/pagina2', (req, res) => {
     const userId = req.cookies.userId;
   
-    // Registra a atividade do usuário no array de atividades
     atividade.push({ userId, activity: 'Visitou a página 2', timestamp: new Date() });
     saveJson();
 
@@ -71,7 +69,14 @@ app.get('/pagina1', (req, res) => {
     res.json(atividade);
   });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  app.get('/clear', (req, res) => {
+    atividade.length = 0;
+
+    saveJson();
+
+    res.send('jsonfile, limpado com sucesso');
+  })
+
+app.listen(3000, () => {
+  console.log(`Servidor rodando`);
 });
